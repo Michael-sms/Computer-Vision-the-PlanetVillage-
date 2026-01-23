@@ -4,9 +4,11 @@
 
 # Ignore Python cache files
 __pycache__/
+data/__pycache__/
+utils/__pycache__/
 
 # Ignore the data directory
 datasets/
 
 # Ignore temp files
-3023244204-30236016-选题申请书.pdf
+checkpoints/
