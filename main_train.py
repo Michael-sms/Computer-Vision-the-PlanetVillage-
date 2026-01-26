@@ -73,10 +73,6 @@ def main():
     # 解析参数
     args = parse_args()
     
-    print("\n" + "=" * 70)
-    print("MobileNetV2+SE 农作物病害识别训练程序".center(70))
-    print("=" * 70 + "\n")
-    
     # ========== 1. 加载配置 ==========
     if os.path.exists(args.config):
         config = load_config(args.config)
@@ -120,8 +116,6 @@ def main():
     print("加载数据集...")
     print("-" * 70)
     
-    # 注意：这里需要第二人完成data_loader模块后才能运行
-    # 临时使用占位符
     try:
         from data import get_all_dataloaders
         train_loader, val_loader, test_loader = get_all_dataloaders(
@@ -133,7 +127,6 @@ def main():
         print(f"测试集: {len(test_loader.dataset)} 张图像")
     except ImportError:
         print("[警告] 数据加载模块未完成，使用模拟数据")
-        print("请等待第二人完成 data_loader.py 模块")
         
         # 创建模拟数据（仅用于测试训练流程）
         class FakeDataset(torch.utils.data.Dataset):
