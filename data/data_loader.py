@@ -156,6 +156,7 @@ class PlantVillageDataset(Dataset):
 
 def get_dataloader(
     split: str = "train",
+    split_file: Optional[str] = None,
     batch_size: int = 32,
     shuffle: Optional[bool] = None,
     num_workers: int = 4,
@@ -168,6 +169,7 @@ def get_dataloader(
     
     Args:
         split: 数据集划分 ("train", "val", "test")
+        split_file: 自定义划分文件路径（指定后split参数将被忽略）
         batch_size: 批大小
         shuffle: 是否打乱（默认训练集打乱，验证/测试集不打乱）
         num_workers: 数据加载进程数
@@ -179,7 +181,8 @@ def get_dataloader(
         DataLoader实例
     """
     # 确定划分文件路径
-    split_file = os.path.join(SPLIT_DATASET_ROOT, f"{split}.txt")
+    if split_file is None:
+        split_file = os.path.join(SPLIT_DATASET_ROOT, f"{split}.txt")
     
     # 选择数据变换
     if split == "train":

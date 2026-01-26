@@ -14,6 +14,8 @@ SPLIT_DATASET_ROOT = os.path.join(PROJECT_ROOT, "datasets", "splits")
 
 # 结果保存路径
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
+DATA_PROCESSING_RESULTS_DIR = os.path.join(PROJECT_ROOT, "results", "data_processing")
+EVALUATION_RESULTS_DIR = os.path.join(PROJECT_ROOT, "results", "evaluated")
 CHECKPOINTS_DIR = os.path.join(PROJECT_ROOT, "checkpoints")
 
 # 38个类别名称（与文件夹名称对应）

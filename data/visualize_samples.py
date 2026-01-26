@@ -22,7 +22,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.constants import (
     DATASET_ROOT,
     SPLIT_DATASET_ROOT,
-    RESULTS_DIR,
+    DATA_PROCESSING_RESULTS_DIR,
     CLASS_NAMES,
     CLASS_DISPLAY_NAMES,
     IDX_TO_CLASS,
@@ -44,8 +44,8 @@ plt.rcParams['axes.unicode_minus'] = False
 
 def ensure_results_dir() -> str:
     """确保结果目录存在"""
-    os.makedirs(RESULTS_DIR, exist_ok=True)
-    return RESULTS_DIR
+    os.makedirs(DATA_PROCESSING_RESULTS_DIR, exist_ok=True)
+    return DATA_PROCESSING_RESULTS_DIR
 
 
 def visualize_class_samples(
@@ -64,7 +64,7 @@ def visualize_class_samples(
     ensure_results_dir()
     
     if save_path is None:
-        save_path = os.path.join(RESULTS_DIR, "class_samples.png")
+        save_path = os.path.join(DATA_PROCESSING_RESULTS_DIR, "class_samples.png")
     
     random.seed(RANDOM_SEED)
     
@@ -128,7 +128,7 @@ def visualize_augmentation_effects(
     ensure_results_dir()
     
     if save_path is None:
-        save_path = os.path.join(RESULTS_DIR, "augmentation_effects.png")
+        save_path = os.path.join(DATA_PROCESSING_RESULTS_DIR, "augmentation_effects.png")
     
     random.seed(RANDOM_SEED)
     
@@ -195,7 +195,7 @@ def visualize_class_distribution(save_path: Optional[str] = None) -> None:
     ensure_results_dir()
     
     if save_path is None:
-        save_path = os.path.join(RESULTS_DIR, "class_distribution.png")
+        save_path = os.path.join(DATA_PROCESSING_RESULTS_DIR, "class_distribution.png")
     
     # 统计各类别样本数
     class_counts = []
@@ -259,7 +259,7 @@ def visualize_split_distribution(save_path: Optional[str] = None) -> None:
     ensure_results_dir()
     
     if save_path is None:
-        save_path = os.path.join(RESULTS_DIR, "split_distribution.png")
+        save_path = os.path.join(DATA_PROCESSING_RESULTS_DIR, "split_distribution.png")
     
     # 加载划分文件并统计
     splits = ['train', 'val', 'test']
@@ -341,7 +341,7 @@ def visualize_sample_grid(
     ensure_results_dir()
     
     if save_path is None:
-        save_path = os.path.join(RESULTS_DIR, f"{split}_sample_grid.png")
+        save_path = os.path.join(DATA_PROCESSING_RESULTS_DIR, f"{split}_sample_grid.png")
     
     split_file = os.path.join(SPLIT_DATASET_ROOT, f"{split}.txt")
     if not os.path.exists(split_file):
@@ -405,7 +405,7 @@ def generate_all_visualizations() -> None:
     visualize_sample_grid(split="train")
     
     print("\n" + "=" * 60)
-    print(f"✓ 所有可视化结果已保存至: {RESULTS_DIR}")
+    print(f"✓ 所有可视化结果已保存至: {DATA_PROCESSING_RESULTS_DIR}")
     print("=" * 60)
 
 

@@ -85,10 +85,12 @@ final-project/
 │   └── lr_scheduler.py       # 学习率调度
 │
 ├── evaluation/                # 评估模块
+│   ├── __init__.py           # 模块导出
 │   ├── metrics.py            # 评估指标计算
 │   ├── confusion_analysis.py # 混淆矩阵分析
 │   ├── gradcam.py            # Grad-CAM 可视化
-│   └── test.py               # 测试集评估
+│   ├── visualization.py      # 训练曲线与指标可视化
+│   └── test.py               # 测试集评估主脚本
 │
 ├── utils/                     # 工具函数
 │   ├── constants.py          # 项目常量定义
@@ -101,9 +103,12 @@ final-project/
 │
 ├── checkpoints/               # 模型权重保存
 ├── results/                   # 结果输出
+│   ├── data_processing/      # 数据处理可视化结果
+│   └── evaluated/            # 模型评估结果
 ├── docs/                      # 文档
 │   ├── PROJECT_PLAN.md       # 项目计划
-│   └── DATA_USAGE.md         # 数据使用说明
+│   ├── DATA_USAGE.md         # 数据使用说明
+|   └── EVALUATION_USAGE.md         # 评估使用说明
 │
 ├── config.yaml                # 配置文件
 ├── main_train.py              # 训练入口
@@ -133,7 +138,7 @@ python -m data.split_dataset
 python -m data.visualize_samples
 ```
 
-可视化结果保存在 `results/`:
+可视化结果保存在 `results/data_processing/`:
 - 类别样本展示
 - 数据增强效果
 - 类别分布图
@@ -171,13 +176,34 @@ data:
 ### 3. 模型评估
 
 ```bash
+# 完整评估（包含 Grad-CAM 可视化）
 python -m evaluation.test --checkpoint checkpoints/best_model.pth
+
+# 快速评估（跳过 Grad-CAM）
+python -m evaluation.test --no-gradcam
+
+# 指定输出目录
+python -m evaluation.test --output-dir results/evaluated
 ```
 
-### 4. Grad-CAM 可视化
+评估结果保存在 `results/evaluated/`:
+- `metrics_report.json` - 完整评估指标
+- `confusion_matrix_full.png` - 38类完整混淆矩阵
+- `confusion_matrix_simplified.png` - 错误率最高类别混淆矩阵
+- `confusion_analysis.txt` - 混淆分析报告
+- `gradcam_summary.png` - Grad-CAM 汇总图
+- `gradcam_samples/` - 各类别 Grad-CAM 样本
 
-```bash
-python -m evaluation.gradcam --checkpoint checkpoints/best_model.pth --num_samples 10
+### 4. 生成训练曲线与指标可视化
+
+```python
+from evaluation.visualization import plot_training_history, plot_class_metrics
+
+# 绘制训练曲线（Loss/Acc/LR）
+plot_training_history()
+
+# 绘制类别指标对比图（最佳/最差 F1 类别）
+plot_class_metrics()
 ```
 
 ---
@@ -253,11 +279,17 @@ python -m evaluation.gradcam --checkpoint checkpoints/best_model.pth --num_sampl
 
 ### 混淆矩阵
 
-混淆矩阵和详细的类别级性能分析可在 `results/` 目录查看。
+混淆矩阵和详细的类别级性能分析可在 `results/evaluated/` 目录查看：
+- 完整 38×38 混淆矩阵热力图
+- 错误率最高类别的简化混淆矩阵
+- 最易混淆类别对分析报告
 
 ### Grad-CAM 可视化
 
 模型通过 Grad-CAM 可视化显示，网络能够正确关注叶片上的病变区域，而非背景噪声。
+可视化结果包括：
+- 汇总图（16个样本的原图与热力图对比）
+- 各类别样本的 Grad-CAM 热力图（每类3张）
 
 ---
 
@@ -314,6 +346,7 @@ for epoch in range(num_epochs):
 
 - [项目计划](docs/PROJECT_PLAN.md) - 完整的项目计划和两人分工方案
 - [数据使用说明](docs/DATA_USAGE.md) - 数据处理模块的详细使用文档
+- [评估模块使用说明](docs/EVALUATION_USAGE.md) - 模型评估与可视化的详细使用文档
 
 ---
 
@@ -326,29 +359,31 @@ for epoch in range(num_epochs):
 - [x] 样本可视化功能
 - [x] MobileNetV2 + SE-Block 模型实现
 - [x] 训练流程开发
-- [ ] 模型训练和调优
-- [ ] 评估指标计算
-- [ ] 混淆矩阵分析
-- [ ] Grad-CAM 可视化
-- [ ] 完整测试和报告
+- [x] 模型训练和调优
+- [x] 评估指标计算（Accuracy/Precision/Recall/F1/Top-K）
+- [x] 混淆矩阵分析与可视化
+- [x] Grad-CAM 可解释性可视化
+- [x] 训练曲线与类别指标可视化
+- [ ] 完整测试和最终报告
 
 ---
 
 ## 👥 团队分工
 
 ### 第一人：模型与训练模块
-- MobileNetV2 + SE-Block 模型实现
-- 训练流程和验证逻辑
-- 学习率调度和早停机制
-- 超参数调优
+- ✅ MobileNetV2 + SE-Block 模型实现
+- ✅ 训练流程和验证逻辑
+- ✅ 学习率调度和早停机制
+- ✅ 超参数调优
 
 ### 第二人：数据处理与评估模块
 - ✅ 数据集划分和加载
 - ✅ 数据增强策略
 - ✅ 样本可视化
-- 评估指标计算
-- 混淆矩阵分析
-- Grad-CAM 可视化
+- ✅ 评估指标计算（Accuracy/Precision/Recall/F1/Top-K）
+- ✅ 混淆矩阵分析与可视化
+- ✅ Grad-CAM 可解释性可视化
+- ✅ 训练曲线与类别指标可视化
 
 ---
 

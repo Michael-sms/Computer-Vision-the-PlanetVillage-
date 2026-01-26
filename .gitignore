@@ -6,6 +6,7 @@
 __pycache__/
 data/__pycache__/
 utils/__pycache__/
+evaluation/__pycache__/
 
 # Ignore the data directory
 datasets/
