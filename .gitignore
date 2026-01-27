@@ -13,3 +13,4 @@ datasets/
 
 # Ignore temp files
 checkpoints/
+docs/main.tex
